@@ -36,6 +36,7 @@ class AddNewSubscriptionScreen extends React.Component {
     }
     console.log(item);
     Database.addItem(item);
+    this.props.navigation.navigate('Home', {});
   }
 
   _onNotificationSwitch = () => this.setState({ switchOn: !this.state.switchOn });
