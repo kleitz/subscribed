@@ -12,7 +12,7 @@ import HomeNavBar from '../components/HomeNavBar';
 import AddNavBar from '../components/AddNavBar';
 import EditNavBar from '../components/EditNavBar';
 
-const AddSubscription = () => ( <AddSubscriptionScreen /> );
+const AddSubscription = ({navigation}) => ( <AddSubscriptionScreen navigation={navigation}/> );
 const SubscriptionList = ({ navigation }) => ( <SubscriptionListScreen navigation={navigation} /> );
 const SubscriptionDetail = ({ navigation }) => ( <SubscriptionDetailScreen navigation={navigation} /> );
 const Notification = () => ( <NotificationScreen /> );
