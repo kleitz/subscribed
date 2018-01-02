@@ -14,7 +14,6 @@ class HomeNavBar extends React.Component {
       <NavigationBar 
         styleName="inline" 
         centerComponent={ <Title>Subscriptions</Title> } 
-        leftComponent={ <Button><Icon styleName="small" name="sidebar" /></Button> } 
         rightComponent={ <Button onPress={this.handleAddPress}><Icon name="plus-button" /></Button> } 
        />
     );

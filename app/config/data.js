@@ -2,7 +2,7 @@ export const dummySubscription = [
   {
     "id": "01",
     "title": "Netflix Subscription",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every_month",
     "amount": {
@@ -14,7 +14,7 @@ export const dummySubscription = [
   {
     "id": "02",
     "title": "Newspaper - Times of India",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every_month",
     "amount": {
@@ -29,7 +29,7 @@ export const subscriptions = [
   {
     "id": "1",
     "title": "Netflix Subscription",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every month",
     "amount": {
@@ -41,7 +41,7 @@ export const subscriptions = [
   {
     "id": "2",
     "title": "Milk Subscription",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every month",
     "amount": {
@@ -53,7 +53,7 @@ export const subscriptions = [
   {
     "id": "3",
     "title": "Internet Subscription",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every month",
     "amount": {
@@ -65,7 +65,7 @@ export const subscriptions = [
   {
     "id": "4",
     "title": "Maid - Floor Clean",
-    "issue_date": "21 Jan",
+    "start_date": "21 Jan",
     "due_date": "21 Jan",
     "repeat": "every month",
     "amount": {

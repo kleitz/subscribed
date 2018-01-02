@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
+import moment from 'moment';
 
 import { View, Screen, ListView } from '@shoutem/ui';
 import { TouchableOpacity } from '@shoutem/ui';
@@ -7,8 +8,7 @@ import { ScrollView } from '@shoutem/ui';
 import { Title, Icon, Text, Button } from '@shoutem/ui';
 import { Row, Tile, Subtitle, Caption } from '@shoutem/ui';
 
-import Database from '../components/storage.js';
-
+import Database from '../services/storage.js';
 
 class SubscriptionListScreen extends React.Component {
 
@@ -16,13 +16,46 @@ class SubscriptionListScreen extends React.Component {
     super(props);
     this.renderRow = this.renderRow.bind(this);
     this.state = {
-      subscriptions: []
+      subscriptions: [],
+      pastMonthTotal: 0,
+      currentMonthTotal: 0,
+      nextMonthTotal: 0
     }
   };
 
   componentDidMount() {
-    Database.getList().then(list => this.setState({subscriptions: list}));
+    this.populateList();
   }
+
+  populateList = () => {
+    Database.getAllSubscriptions().then(list => {
+      this.setState({subscriptions: list}, this.updateMonthsTotal);
+    });
+  };
+
+  updateMonthsTotal = () => {
+    const currentMonth = moment(new Date()).format('MMM');
+    const pastMonth = moment(new Date()).subtract(1, 'months').format('MMM');
+    const nextMonth = moment(new Date()).add(1, 'months').format('MMM');
+
+    var pastMonthTotal = 0;
+    var currentMonthTotal = 0;
+    var nextMonthTotal = 0;
+
+    this.state.subscriptions.forEach(function(subscription) {
+      const subscriptionMonth = moment(subscription.due_date, 'DD MMM, YYYY').format('MMM');
+
+      if (subscriptionMonth == pastMonth) { pastMonthTotal += parseInt(subscription.amount.price); }
+      if (subscriptionMonth == currentMonth) { currentMonthTotal += parseInt(subscription.amount.price); }
+      if (subscriptionMonth == nextMonth) { nextMonthTotal += parseInt(subscription.amount.price); }
+    });
+
+    this.setState({
+      pastMonthTotal: pastMonthTotal,
+      currentMonthTotal: currentMonthTotal,
+      nextMonthTotal: nextMonthTotal
+    });
+  };
 
   onSeeDetails = (subscription) => {
     this.props.navigation.navigate('Details', { ...subscription });
@@ -52,15 +85,15 @@ class SubscriptionListScreen extends React.Component {
           <View styleName="horizontal flexible">
             <Tile styleName="text-centric">
               <Caption>Last month</Caption>
-              <Subtitle style={{color: 'green'}}>10000</Subtitle>
+              <Subtitle style={{color: 'green'}}> ₹ {this.state.pastMonthTotal}</Subtitle>
             </Tile>
             <Tile styleName="text-centric">
               <Caption>This month</Caption>
-              <Subtitle style={{ color: 'red' }}>20000</Subtitle>
+              <Subtitle style={{ color: 'red' }}> ₹ {this.state.currentMonthTotal}</Subtitle>
             </Tile>
             <Tile styleName="text-centric">
               <Caption>Next month</Caption>
-              <Subtitle>10000</Subtitle>
+              <Subtitle> ₹ {this.state.nextMonthTotal}</Subtitle>
             </Tile>
         </View>
 
@@ -68,6 +101,7 @@ class SubscriptionListScreen extends React.Component {
           <ListView
             data={this.state.subscriptions}
             renderRow={this.renderRow}
+            onRefresh={this.populateList}
           />
         </Screen>
 

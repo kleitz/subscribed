@@ -14,17 +14,13 @@ class EditNavBar extends React.Component {
     return (
       <NavigationBar
         styleName="inline"
-        centerComponent={<Title>Details</Title>}
         leftComponent={(
-          <Button styleName="clear" onPress={this.dismiss}>
-            <Text>Cancel</Text>
+          <Button styleName="clear" onPress={this.dismiss()}>
+            <Icon name="left-arrow" />
+            <Text>Back</Text>
           </Button>
         )}
-        rightComponent={(
-          <Button styleName="clear" onPress={this.dismiss}>
-            <Text>Save</Text>
-          </Button>
-        )}
+        centerComponent={<Title>Details</Title>}
       />
     );
   }
