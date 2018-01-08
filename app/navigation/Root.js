@@ -1,7 +1,7 @@
 import React from 'react';
-import { TabNavigator, StackNavigator } from 'react-navigation';
 
 import { View, Text, Icon } from '@shoutem/ui';
+import { Router, Scene } from 'react-native-router-flux';
 
 import AddSubscriptionScreen from '../screens/AddSubscriptionScreen';
 import SubscriptionListScreen from '../screens/SubscriptionListScreen';
@@ -11,48 +11,31 @@ import HomeNavBar from '../components/nav/HomeNavBar';
 import AddNavBar from '../components/nav/AddNavBar';
 import EditNavBar from '../components/nav/EditNavBar';
 
-const AddSubscription = ({navigation}) => ( <AddSubscriptionScreen navigation={navigation} /> );
-const SubscriptionList = ({ navigation }) => ( <SubscriptionListScreen navigation={navigation} /> );
-const SubscriptionDetail = ({ navigation }) => ( <SubscriptionDetailScreen navigation={navigation} /> );
+const AddSubscription = () => ( <AddSubscriptionScreen /> );
+const SubscriptionList = () => ( <SubscriptionListScreen /> );
+const SubscriptionDetail = () => ( <SubscriptionDetailScreen /> );
 
-const HomeNav = ({ navigation }) => ( <HomeNavBar navigation={navigation} /> );
-const AddNav = ({ navigation }) => ( <AddNavBar navigation={navigation} /> );
-const EditNav = ({ navigation }) => ( <EditNavBar navigation={navigation} /> );
+const HomeNav = () => ( <HomeNavBar /> );
+const AddNav = () => ( <AddNavBar /> );
+const EditNav = () => ( <EditNavBar /> );
 
-const SubscriptionStack = StackNavigator({
-  Home: { 
-    screen: SubscriptionList,
-    navigationOptions: {
-      header: HomeNav
-    }
-  },
-  Details: { 
-    screen: SubscriptionDetail,
-    navigationOptions: {
-      header: EditNav
-    },
-  }
-});
+const Root = () => {
+  return (
+    <Router>
+      <Scene key="root" modal hideNavBar>
 
-export const AddSubscriptionStack = StackNavigator({
-  Add: {
-    screen: AddSubscription,
-    navigationOptions: {
-      header: AddNav
-    },
-  },
-});
+        <Scene key="subscription_list">
+          <Scene component={SubscriptionList} navBar={HomeNav} />
+          <Scene key="subscription_detail" component={SubscriptionDetail} navBar={EditNav} />
+        </Scene>
 
-const Root = StackNavigator({
-  Home: {
-    screen: SubscriptionStack
-  },
-  Add: {
-    screen: AddSubscriptionStack
-  }
-}, {
-  mode: 'modal',
-  headerMode: 'none'
-});
+        <Scene key="subscription_add">
+          <Scene direction="vertical" component={AddSubscription} navBar={AddNav} />
+        </Scene>
+
+      </Scene>
+    </Router>
+  );
+}
 
 export default Root;

@@ -9,6 +9,7 @@ import { Title, Icon, Text, Button } from '@shoutem/ui';
 import { Row, Tile, Subtitle, Caption } from '@shoutem/ui';
 
 import Database from '../services/storage.js';
+import { Actions } from 'react-native-router-flux';
 
 class SubscriptionListScreen extends React.Component {
 
@@ -58,7 +59,7 @@ class SubscriptionListScreen extends React.Component {
   };
 
   onSeeDetails = (subscription) => {
-    this.props.navigation.navigate('Details', { ...subscription });
+    Actions.subscription_detail({subscription: subscription});
   };
 
   renderRow(subscription) {

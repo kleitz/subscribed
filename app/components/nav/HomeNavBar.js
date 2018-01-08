@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 
 import { NavigationBar, Title, Icon, Button } from '@shoutem/ui'
+import { Actions } from 'react-native-router-flux';
 
 class HomeNavBar extends React.Component {
 
   handleAddPress = () => {
-    this.props.navigation.navigate('Add');
+    Actions.subscription_add();
   };
 
   render() {

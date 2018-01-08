@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 
 import { NavigationBar, Title, Text, Icon, Button } from '@shoutem/ui'
+import { Actions } from 'react-native-router-flux';
 
 class AddNavBar extends React.Component {
 
   dismiss = () => {
-    this.props.navigation.goBack();
+    Actions.pop();
   }
 
   render() {

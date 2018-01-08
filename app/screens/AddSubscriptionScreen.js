@@ -8,10 +8,6 @@ import FormSubscription from '../components/FormSubscription';
 
 class AddNewSubscriptionScreen extends React.Component {
 
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <FormSubscription 

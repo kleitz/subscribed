@@ -1,22 +1,21 @@
 import React, { Component } from 'react';
-import { StatusBar } from 'react-native';
+import { Permissions } from 'expo';
+import moment from 'moment';
+
 import { Alert } from 'react-native';
+import { StatusBar } from 'react-native';
 
 import { TouchableOpacity } from '@shoutem/ui';
 import { Title, Icon, Text, Button } from '@shoutem/ui';
 import { View, ScrollView, Row, Divider } from '@shoutem/ui';
 import { TextInput, Switch, DropDownMenu } from '@shoutem/ui';
 
-
-import moment from 'moment';
-import { Permissions } from 'expo';
+import { Actions } from 'react-native-router-flux';
 import DateTimePicker from 'react-native-modal-datetime-picker';
 
 import { config } from '../config/config';
 import Database from '../services/storage.js';
 import NotificationManager from '../services/notification.js';
-
-import { NavigationActions } from 'react-navigation';
 
 class FormSubscription extends React.Component {
 
@@ -42,9 +41,9 @@ class FormSubscription extends React.Component {
     }
   }
 
-  backAction = NavigationActions.back({
-    key: 'Home'
-  })
+  showListScreen = () => {
+    Actions.reset('subscription_list');
+  }
 
   save = () => {
     const item = {
@@ -64,14 +63,14 @@ class FormSubscription extends React.Component {
         .then(id => Database.updateSubscription(item.id, {notification_id: id}));
     }
 
-    this.props.navigation.dispatch(this.backAction);
+    this.showListScreen();
   }
 
   deleteSubscription = () => {
     if (this.props.notificationId) { NotificationManager.cancelNotification(this.props.notificationId); }
     Database.removeSubscription(this.props.id);
 
-    this.props.navigation.goBack();
+    this.showListScreen();
   }
 
   _onNotificationSwitch = async (value) => {

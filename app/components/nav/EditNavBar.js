@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 
 import { NavigationBar, Title, Text, Icon, Button } from '@shoutem/ui'
+import { Actions } from 'react-native-router-flux';
 
 class EditNavBar extends React.Component {
 
   dismiss = () => {
-    this.props.navigation.goBack();
+    Actions.pop();
   }
 
   render() {
@@ -15,7 +16,7 @@ class EditNavBar extends React.Component {
       <NavigationBar
         styleName="inline"
         leftComponent={(
-          <Button styleName="clear" onPress={this.dismiss()}>
+          <Button styleName="clear" onPress={this.dismiss}>
             <Icon name="left-arrow" />
             <Text>Back</Text>
           </Button>

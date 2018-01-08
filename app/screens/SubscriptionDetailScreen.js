@@ -4,18 +4,16 @@ import { StatusBar } from 'react-native';
 import { config } from '../config/config';
 import FormSubscription from '../components/FormSubscription';
 
-class SubscriptionDetail extends React.Component {
+import { Actions } from 'react-native-router-flux';
 
-  constructor(props) {
-    super(props);
-  }
+class SubscriptionDetail extends React.Component {
 
   findRepeatObject = (repeatMode) => {
     return config.repeatOptions.find(item => item.value == repeatMode);
   }
 
   render() {
-    const subscription = this.props.navigation.state.params;
+    const subscription = Actions.currentParams.subscription;
 
     return (
       <FormSubscription

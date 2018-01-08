@@ -1,4 +1,4 @@
-# subscribed
+# Subscribed
 Track all your subscriptions in one place and get payment reminders.
 
 ### Built with
