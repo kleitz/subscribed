@@ -16,6 +16,8 @@ import { config } from '../config/config';
 import Database from '../services/storage.js';
 import NotificationManager from '../services/notification.js';
 
+import { NavigationActions } from 'react-navigation';
+
 class FormSubscription extends React.Component {
 
   constructor(props) {
@@ -40,6 +42,10 @@ class FormSubscription extends React.Component {
     }
   }
 
+  backAction = NavigationActions.back({
+    key: 'Home'
+  })
+
   save = () => {
     const item = {
       id: this.getRandomInt(1,10000),
@@ -58,7 +64,7 @@ class FormSubscription extends React.Component {
         .then(id => Database.updateSubscription(item.id, {notification_id: id}));
     }
 
-    this.props.navigation.goBack();
+    this.props.navigation.dispatch(this.backAction);
   }
 
   deleteSubscription = () => {
