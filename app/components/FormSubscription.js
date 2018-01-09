@@ -57,7 +57,7 @@ class FormSubscription extends React.Component {
     }
     Database.addSubscription(item);
     if (item.notification) {
-      const timeEpoch = moment(item.due_date + ' 09:00:00', 'DD MMM, YYYY HH:mm:ss').valueOf();
+      const timeEpoch = moment(item.due_date + ' 09:00:00', 'MMMM DD, YYYY HH:mm:ss').valueOf();
 
       NotificationManager.scheduleNotification(item.title, timeEpoch, item.repeat)
         .then(id => Database.updateSubscription(item.id, {notification_id: id}));
@@ -109,17 +109,17 @@ class FormSubscription extends React.Component {
   _hideDueDateTimePicker = () => this.setState({ isDueDateTimePickerVisible: false });
 
   _handleStartDatePicked = (date) => {
-    this.setState({startDate: moment(date).format('DD MMM, YYYY')}, this.setDueDate);
+    this.setState({startDate: moment(date).format('MMMM DD, YYYY')}, this.setDueDate);
     this._hideStartDateTimePicker();
   };
   _handleDueDatePicked = (date) => {
-    this.setState({dueDate: moment(date).format('DD MMM, YYYY')});
+    this.setState({dueDate: moment(date).format('MMMM DD, YYYY')});
     this._hideDueDateTimePicker();
   };
 
   setDueDate = () => {
     const repeatMode = this.state.selectedRepeatOption.value + 's';
-    const dueDate = moment(this.state.startDate, 'DD MMM, YYYY').add('1', repeatMode).format('DD MMM, YYYY');
+    const dueDate = moment(this.state.startDate, 'MMMM DD, YYYY').add('1', repeatMode).format('MMMM DD, YYYY');
     this.setState({dueDate: dueDate});
   }
 
@@ -149,13 +149,20 @@ class FormSubscription extends React.Component {
       <View>
         <ScrollView>
           <Divider />
-          <TextInput placeholder={'Subscription name'} 
+
+          <TextInput 
+            returnKeyType='done'
+            placeholder={'Subscription name'}
             onChangeText={(title) => this.setState({title})}
             value={this.state.title} />
 
-          <TextInput placeholder={'Amount'} keyboardType="numeric"
+          <TextInput
+            returnKeyType='done'
+            placeholder={'Amount'} 
+            keyboardType="numeric"
             onChangeText={(price) => this.setState({price})}
             value={this.state.price} />
+
           <Divider />
 
           <TouchableOpacity onPress={this._showStartDateTimePicker}>
@@ -207,8 +214,8 @@ class FormSubscription extends React.Component {
             onCancel={this._hideStartDateTimePicker}
           />
           <DateTimePicker
-            date={moment(this.state.dueDate, 'DD MMM, YYYY').toDate()}
-            minimumDate={moment(this.state.startDate, 'DD MMM, YYYY').toDate()}
+            date={moment(this.state.dueDate, 'MMMM DD, YYYY').toDate()}
+            minimumDate={moment(this.state.startDate, 'MMMM DD, YYYY').toDate()}
             isVisible={this.state.isDueDateTimePickerVisible}
             onConfirm={this._handleDueDatePicked}
             onCancel={this._hideDueDateTimePicker}

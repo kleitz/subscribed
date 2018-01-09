@@ -2,14 +2,16 @@ import React, { Component } from 'react';
 import { StatusBar } from 'react-native';
 import moment from 'moment';
 
-import { View, Screen, ListView } from '@shoutem/ui';
-import { TouchableOpacity } from '@shoutem/ui';
 import { ScrollView } from '@shoutem/ui';
+import { TouchableOpacity } from '@shoutem/ui';
+import { View, Screen, ListView } from '@shoutem/ui';
 import { Title, Icon, Text, Button } from '@shoutem/ui';
 import { Row, Tile, Subtitle, Caption } from '@shoutem/ui';
 
 import Database from '../services/storage.js';
 import { Actions } from 'react-native-router-flux';
+
+import TotalDisplayBar from '../components/TotalDisplayBar';
 
 class SubscriptionListScreen extends React.Component {
 
@@ -17,10 +19,7 @@ class SubscriptionListScreen extends React.Component {
     super(props);
     this.renderRow = this.renderRow.bind(this);
     this.state = {
-      subscriptions: [],
-      pastMonthTotal: 0,
-      currentMonthTotal: 0,
-      nextMonthTotal: 0
+      subscriptions: []
     }
   };
 
@@ -30,37 +29,26 @@ class SubscriptionListScreen extends React.Component {
 
   populateList = () => {
     Database.getAllSubscriptions().then(list => {
-      this.setState({subscriptions: list}, this.updateMonthsTotal);
-    });
-  };
-
-  updateMonthsTotal = () => {
-    const currentMonth = moment(new Date()).format('MMM');
-    const pastMonth = moment(new Date()).subtract(1, 'months').format('MMM');
-    const nextMonth = moment(new Date()).add(1, 'months').format('MMM');
-
-    var pastMonthTotal = 0;
-    var currentMonthTotal = 0;
-    var nextMonthTotal = 0;
-
-    this.state.subscriptions.forEach(function(subscription) {
-      const subscriptionMonth = moment(subscription.due_date, 'DD MMM, YYYY').format('MMM');
-
-      if (subscriptionMonth == pastMonth) { pastMonthTotal += parseInt(subscription.amount.price); }
-      if (subscriptionMonth == currentMonth) { currentMonthTotal += parseInt(subscription.amount.price); }
-      if (subscriptionMonth == nextMonth) { nextMonthTotal += parseInt(subscription.amount.price); }
-    });
-
-    this.setState({
-      pastMonthTotal: pastMonthTotal,
-      currentMonthTotal: currentMonthTotal,
-      nextMonthTotal: nextMonthTotal
+      this.setState({subscriptions: list}, this.updateTotalDisplayBar);
     });
   };
 
   onSeeDetails = (subscription) => {
     Actions.subscription_detail({subscription: subscription});
   };
+
+  updateTotalDisplayBar = () => {
+    this.TotalDisplayBarChild.updateMonthsTotal(this.state.subscriptions);
+  };
+
+  isCurrentMonth(date) {
+    date = new Date(date).getTime();
+    let d = new Date();
+    let startDate = (new Date(d.getFullYear(), d.getMonth(), 1)).getTime();
+    let endDate = (new Date(d.getFullYear(), d.getMonth() + 1, 0)).getTime();
+
+    return (date <= endDate && date >= startDate) ? { color: 'red' } : {};
+  }
 
   renderRow(subscription) {
     return (
@@ -70,7 +58,9 @@ class SubscriptionListScreen extends React.Component {
           <View styleName="vertical stretch space-between">
             <Subtitle>{subscription.title}</Subtitle>
             <Subtitle>{subscription.amount.symbol} {subscription.amount.price}</Subtitle>
-            <Caption>Due on {subscription.due_date}</Caption>
+            <Caption style={this.isCurrentMonth(subscription.due_date)}>
+              Due on {subscription.due_date}
+            </Caption>
           </View>
           <Icon styleName="disclosure" name="right-arrow" />
         </Row>
@@ -83,28 +73,15 @@ class SubscriptionListScreen extends React.Component {
       
       <View styleName="flexible">
         <ScrollView>
-          <View styleName="horizontal flexible">
-            <Tile styleName="text-centric">
-              <Caption>Last month</Caption>
-              <Subtitle style={{color: 'green'}}> ₹ {this.state.pastMonthTotal}</Subtitle>
-            </Tile>
-            <Tile styleName="text-centric">
-              <Caption>This month</Caption>
-              <Subtitle style={{ color: 'red' }}> ₹ {this.state.currentMonthTotal}</Subtitle>
-            </Tile>
-            <Tile styleName="text-centric">
-              <Caption>Next month</Caption>
-              <Subtitle> ₹ {this.state.nextMonthTotal}</Subtitle>
-            </Tile>
-        </View>
+          <TotalDisplayBar onRef={ref => (this.TotalDisplayBarChild = ref)} />
 
-        <Screen>
-          <ListView
-            data={this.state.subscriptions}
-            renderRow={this.renderRow}
-            onRefresh={this.populateList}
-          />
-        </Screen>
+          <Screen>
+            <ListView
+              data={this.state.subscriptions}
+              renderRow={this.renderRow}
+              onRefresh={this.populateList}
+            />
+          </Screen>
 
         </ScrollView>
       </View>

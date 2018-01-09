@@ -13,8 +13,8 @@ class AddNewSubscriptionScreen extends React.Component {
       <FormSubscription 
         title=''
         price=''
-        startDate={moment(new Date()).format('DD MMM, YYYY')}
-        dueDate={moment(new Date()).format('DD MMM, YYYY')}
+        startDate={moment().format('MMMM DD, YYYY')}
+        dueDate={moment().format('MMMM DD, YYYY')}
         notificationSwitch={true}
         repeatObject={config.repeatOptions[2]}
         navigation={this.props.navigation}

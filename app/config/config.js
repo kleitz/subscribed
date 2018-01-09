@@ -1,6 +1,5 @@
 export const config = {
   repeatOptions: [
-    { title: 'Never', value: 'never' },
     { title: 'Every week ', value: 'week' },
     { title: 'Every month', value: 'month' },
     { title: 'Every year', value: 'year' },
